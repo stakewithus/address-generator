@@ -1,0 +1,59 @@
+{
+  "name": "address-generator",
+  "version": "0.1.0",
+  "private": true,
+  "author": "IOV SAS <admin@iov.one>",
+  "license": "Apache-2.0",
+  "homepage": "https://iov-one.github.io/address-generator/",
+  "scripts": {
+    "lint": "eslint -c .eslintrc.json --max-warnings 0 'src/**/*.ts{,x}'",
+    "lint-fix": "yarn lint --fix",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "dependencies": {
+    "@iov/bcp": "^0.16.1",
+    "@iov/bns": "^0.16.1",
+    "@iov/crypto": "^0.16.1",
+    "@iov/encoding": "^0.16.1",
+    "@iov/keycontrol": "^0.16.1",
+    "@types/node": "^10",
+    "bip39": "^3.0.2",
+    "bootstrap": "^4.3.1",
+    "react": "^16.9.0-rc.0",
+    "react-bootstrap": "^1.0.0-beta.10",
+    "react-bootstrap-typeahead": "^3.4.6",
+    "react-dom": "^16.9.0-rc.0",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "^3.0.1",
+    "typescript": "~3.4"
+  },
+  "devDependencies": {
+    "@types/react": "^16.8.25",
+    "@types/react-bootstrap-typeahead": "^3.4.5",
+    "@types/react-dom": "^16.8.5",
+    "@types/react-router-dom": "^4.3.4",
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/parser": "^1.13.0",
+    "eslint": "^5",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-config-react-app": "^4.0.1",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-simple-import-sort": "^4.0.0",
+    "gh-pages": "^2.1.0",
+    "prettier": "^1.18.2"
+  }
+}
