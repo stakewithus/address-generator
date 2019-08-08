@@ -52,7 +52,7 @@ const confirmedState: AppState = {
 class App extends React.Component<AppProps, AppState> {
   public constructor(props: AppProps) {
     super(props);
-    this.state = confirmedState;
+    this.state = emptyState;
   }
 
   public componentDidMount(): void {
