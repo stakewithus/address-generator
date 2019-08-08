@@ -28,6 +28,11 @@ function wordCountOk(count: number): boolean {
   return count === 12 || count === 15 || count === 18 || count === 21 || count === 24;
 }
 
+function chainIdForAddress(network: "mainnet" | "testnet"): ChainId {
+  if (network === "mainnet") return "iov-mainnet" as ChainId;
+  else return "iov-lovenet" as ChainId; // any testnet chain ID is fine. We just need it for the address prefix
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emptyState: AppState = {
   generatedMnemonic: undefined,
@@ -159,7 +164,8 @@ class App extends React.Component<AppProps, AppState> {
       }
 
       const wallet = Ed25519HdWallet.fromMnemonic(confirmed.toString());
-      const identity = await wallet.createIdentity("iov-lovenet" as ChainId, HdPaths.iov(0));
+      const chainId = chainIdForAddress(this.props.network);
+      const identity = await wallet.createIdentity(chainId, HdPaths.iov(0));
       const address = bnsCodec.identityToAddress(identity);
 
       this.setState({
