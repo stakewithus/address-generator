@@ -1,7 +1,4 @@
-import { ChainId } from "@iov/bcp";
-import { bnsCodec } from "@iov/bns";
 import { Bip39, EnglishMnemonic, Random } from "@iov/crypto";
-import { Ed25519HdWallet, HdPaths } from "@iov/keycontrol";
 import React from "react";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
@@ -11,6 +8,7 @@ import Jumbotron from "react-bootstrap/Jumbotron";
 import Row from "react-bootstrap/Row";
 import { Link } from "react-router-dom";
 
+import { makeAddress } from "./address";
 import MnemonicInput from "./MnemonicInput";
 
 interface AppProps {
@@ -26,11 +24,6 @@ interface AppState {
 
 function wordCountOk(count: number): boolean {
   return count === 12 || count === 15 || count === 18 || count === 21 || count === 24;
-}
-
-function chainIdForAddress(network: "mainnet" | "testnet"): ChainId {
-  if (network === "mainnet") return "iov-mainnet" as ChainId;
-  else return "iov-lovenet" as ChainId; // any testnet chain ID is fine. We just need it for the address prefix
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -163,14 +156,9 @@ class App extends React.Component<AppProps, AppState> {
         }
       }
 
-      const wallet = Ed25519HdWallet.fromMnemonic(confirmed.toString());
-      const chainId = chainIdForAddress(this.props.network);
-      const identity = await wallet.createIdentity(chainId, HdPaths.iov(0));
-      const address = bnsCodec.identityToAddress(identity);
-
       this.setState({
         step: "address",
-        address: address,
+        address: await makeAddress(confirmed, this.props.network),
       });
     } catch (error) {
       console.error(error);
