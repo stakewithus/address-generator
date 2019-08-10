@@ -70,7 +70,7 @@ class App extends React.Component<AppProps, AppState> {
               <span className="display-2 d-inline-block mr-2">IOV Address Generator</span>
               <small className="badge badge-primary align-top">{this.props.network}</small>
             </h2>
-            <p>
+            <p className="mb-0">
               Here you can generate an IOV address for {this.props.network}. The mnemonic represents your
               private key. When you lose that key, you cannot access that account anymore and all assets are
               lost. It is in your own interest to store this in a safe and secure location. It cannot be
