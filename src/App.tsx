@@ -50,7 +50,7 @@ class App extends React.Component<AppProps, AppState> {
 
   public componentDidMount(): void {
     if (!this.state.generatedMnemonic) {
-      this.randomize();
+      this.generateNewRandomMnemonic();
     }
   }
 
@@ -90,7 +90,11 @@ class App extends React.Component<AppProps, AppState> {
               <Alert.Heading>Your mnemonic:</Alert.Heading>
               <p>{this.state.generatedMnemonic}</p>
               <div className="d-flex justify-content-start">
-                <Button onClick={() => this.randomize()} className="btn-sm" variant="outline-secondary">
+                <Button
+                  onClick={() => this.generateNewRandomMnemonic()}
+                  className="btn-sm"
+                  variant="outline-secondary"
+                >
                   Generate different one
                 </Button>
               </div>
@@ -165,11 +169,9 @@ class App extends React.Component<AppProps, AppState> {
     }
   }
 
-  private randomize(): void {
-    (async () => {
-      const mnemonic = Bip39.encode(await Random.getBytes(16)).toString();
-      this.setState({ generatedMnemonic: mnemonic });
-    })();
+  private async generateNewRandomMnemonic(): Promise<void> {
+    const mnemonic = Bip39.encode(await Random.getBytes(16)).toString();
+    this.setState({ generatedMnemonic: mnemonic });
   }
 }
 
