@@ -57,9 +57,9 @@ class App extends React.Component<AppProps, AppState> {
   public render(): JSX.Element {
     const otherLink =
       this.props.network === "mainnet" ? (
-        <Link to="/testnet">Testnet mode</Link>
+        <Link to="/testnet">Testnet</Link>
       ) : (
-        <Link to="/mainnet">Mainnet mode</Link>
+        <Link to="/mainnet">Mainnet</Link>
       );
 
     return (
@@ -67,18 +67,15 @@ class App extends React.Component<AppProps, AppState> {
         <Jumbotron>
           <Container>
             <h2>
-              <span className="badge badge-primary">{this.props.network}</span>
+              <span className="display-2 d-inline-block mr-2">IOV Address Generator</span>
+              <small className="badge badge-primary align-top">{this.props.network}</small>
             </h2>
-            <h1>
-              <span className="display-2">IOV Address Generator</span>
-            </h1>
             <p>
-              Here you can generate an IOV address for {this.props.network}. Please store this in a secure
-              location. This is the only way to access your account. Lorem ipsum dolor sit amet, consetetur
-              sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+              Here you can generate an IOV address for {this.props.network}. The mnemonic represents your
+              private key. When you lose that key, you cannot access that account anymore and all assets are
+              lost. It is in your own interest to store this in a safe and secure location. It cannot be
+              recovered. Switch to the address generator for {otherLink} instead.
             </p>
-            <p>Switch to {otherLink} instead.</p>
           </Container>
         </Jumbotron>
         <Row>
@@ -88,14 +85,14 @@ class App extends React.Component<AppProps, AppState> {
           <Col>
             <Alert variant="info">
               <Alert.Heading>Your mnemonic:</Alert.Heading>
-              <p>{this.state.generatedMnemonic}</p>
+              <p className="lead">{this.state.generatedMnemonic}</p>
               <div className="d-flex justify-content-start">
                 <Button
                   onClick={() => this.generateNewRandomMnemonic()}
                   className="btn-sm"
                   variant="outline-secondary"
                 >
-                  Generate different one
+                  Generate a different one
                 </Button>
               </div>
 
