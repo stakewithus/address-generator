@@ -132,7 +132,12 @@ class App extends React.Component<AppProps, AppState> {
           </Container>
         </Row>
         <Row hidden={this.state.step !== "address"}>
-          <Container>{this.state.address}</Container>
+          <Col>
+            <Alert variant="success">
+              <Alert.Heading>Your IOV address:</Alert.Heading>
+              <p className="leap">{this.state.address}</p>
+            </Alert>
+          </Col>
         </Row>
       </Container>
     );
