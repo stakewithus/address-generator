@@ -36,7 +36,6 @@ class MnemonicInput extends React.Component<MnemonicInputProps, MnemonicInputSta
           bsSize="lg"
           ref={ref => (this.typeahead = ref as PrivateTypeahead<string>)}
           onChange={selected => {
-            console.log(selected);
             this.setState({ words: selected });
             this.props.onWordsChanged && this.props.onWordsChanged(selected);
           }}
