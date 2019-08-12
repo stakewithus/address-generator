@@ -160,6 +160,7 @@ class App extends React.Component<AppProps, AppState> {
               <Alert.Heading>Your IOV address:</Alert.Heading>
               <p className="leap">{this.state.address}</p>
             </Alert>
+            <p>This browser tab contains sensitive information in memory. Please close it now.</p>
           </Col>
         </Row>
       </Container>
