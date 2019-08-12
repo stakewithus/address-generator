@@ -73,10 +73,8 @@ class App extends React.Component<AppProps, AppState> {
               <small className="badge badge-primary align-top">{this.props.network}</small>
             </h2>
             <p className="mb-0">
-              Here you can generate an IOV address for {this.props.network}. The mnemonic represents your
-              private key. When you lose that key, you cannot access that account anymore and all assets are
-              lost. It is in your own interest to store this in a safe and secure location. It cannot be
-              recovered. Switch to the address generator for {otherLink} instead.
+              Here you can generate an IOV address for {this.props.network}. Switch to the address generator
+              for {otherLink} instead.
             </p>
           </Container>
         </Jumbotron>
@@ -85,8 +83,13 @@ class App extends React.Component<AppProps, AppState> {
         </Row>
         <Row hidden={this.state.step !== "read"}>
           <Col>
+            <h3>Your mnemonic:</h3>
+            <p>
+              The mnemonic represents your private key. When you lose that key, you cannot access that account
+              anymore and all assets are lost. It is in your own interest to store this in a safe and secure
+              location now. We will not show it again and it cannot be recovered.
+            </p>
             <Alert variant="info">
-              <Alert.Heading>Your mnemonic:</Alert.Heading>
               <p className="lead">{this.state.generatedMnemonic}</p>
               <div className="d-flex justify-content-start">
                 <Button
@@ -97,33 +100,30 @@ class App extends React.Component<AppProps, AppState> {
                   Generate a different one
                 </Button>
               </div>
-
-              <hr />
-
-              <div className="d-flex justify-content-end">
-                <Button
-                  className="ml-2"
-                  onClick={() => this.goToConfirm("discard")}
-                  variant="outline-secondary"
-                >
-                  Skip (use externally generated mnemonic instead)
-                </Button>
-                <Button className="ml-2" onClick={() => this.goToConfirm("use")} variant="outline-primary">
-                  Use this mnemonic
-                </Button>
-              </div>
             </Alert>
+
+            <div className="d-flex justify-content-end">
+              <Button
+                className="ml-2"
+                onClick={() => this.goToConfirm("discard")}
+                variant="outline-secondary"
+              >
+                Skip (use externally generated mnemonic instead)
+              </Button>
+              <Button className="ml-2" onClick={() => this.goToConfirm("use")} variant="outline-primary">
+                Use this mnemonic
+              </Button>
+            </div>
           </Col>
         </Row>
         <Row hidden={this.state.step !== "confirm"}>
-          <Container>
-            <div>
-              <p>Type-in your mnemonic</p>
-            </div>
+          <Col>
+            <h3>Type-in your mnemonic:</h3>
+            <p>Let's make sure you can access your mnemonic when you need it.</p>
             <div>
               <MnemonicInput id="input1" onWordsChanged={words => this.setState({ words: words })} />
               <p>
-                <small>Enter 12, 15, 18, 21 or 24 words. {this.state.words.length} words entered.</small>
+                <small>{this.state.words.length} words entered.</small>
               </p>
             </div>
             <div className="d-flex justify-content-end">
@@ -131,7 +131,7 @@ class App extends React.Component<AppProps, AppState> {
                 Generate {this.props.network} address
               </Button>
             </div>
-          </Container>
+          </Col>
         </Row>
         <Row hidden={this.state.step !== "address"}>
           <Col>
