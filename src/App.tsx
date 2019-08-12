@@ -133,7 +133,7 @@ class App extends React.Component<AppProps, AppState> {
   }
 
   private async makeAddress(): Promise<void> {
-    const answer = prompt("Did you store the mneonic in a secure location? Please answer with 'yes'.");
+    const answer = prompt("Did you store the mnemonic in a secure location? If yes, please type-in 'yes'.");
     if ((answer || "").trim().toLowerCase() !== "yes") {
       return;
     }
