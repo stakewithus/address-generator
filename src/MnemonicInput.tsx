@@ -1,6 +1,8 @@
-import * as bip39 from "bip39";
+import { EnglishMnemonic } from "@iov/crypto";
 import React from "react";
 import { Typeahead } from "react-bootstrap-typeahead";
+
+const wordlist = [...EnglishMnemonic.wordlist]; // create copy of correct type
 
 interface MnemonicInputProps {
   readonly id: string;
@@ -32,7 +34,7 @@ class MnemonicInput extends React.Component<MnemonicInputProps, MnemonicInputSta
             this.props.onWordsChanged && this.props.onWordsChanged(selected);
           }}
           selectHintOnEnter={true}
-          options={bip39.wordlists.english}
+          options={wordlist}
           filterBy={(option, props) => {
             const normalized = props.text.trim().toLowerCase();
             return option.startsWith(normalized);

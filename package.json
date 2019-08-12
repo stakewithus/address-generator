@@ -31,7 +31,6 @@
     "@iov/encoding": "^0.16.2",
     "@iov/keycontrol": "^0.16.2",
     "@types/node": "^10",
-    "bip39": "^3.0.2",
     "bootstrap": "^4.3.1",
     "react": "^16.9.0",
     "react-bootstrap": "^1.0.0-beta.10",
