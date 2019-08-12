@@ -3,7 +3,6 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Row from "react-bootstrap/Row";
-import { Link } from "react-router-dom";
 
 interface JumboProps {
   readonly network?: "mainnet" | "testnet";
@@ -11,13 +10,6 @@ interface JumboProps {
 
 class Jumbo extends React.Component<JumboProps, {}> {
   public render(): JSX.Element {
-    const otherLink =
-      this.props.network === "mainnet" ? (
-        <Link to="/testnet">Testnet</Link>
-      ) : (
-        <Link to="/mainnet">Mainnet</Link>
-      );
-
     return (
       <Row>
         <Col>
@@ -29,9 +21,9 @@ class Jumbo extends React.Component<JumboProps, {}> {
                   {this.props.network}
                 </small>
               </h2>
-              <p className="mb-0" hidden={!this.props.network}>
-                Here you can generate an IOV address for {this.props.network}. Switch to the address generator
-                for {otherLink} instead.
+              <p className="mb-0">
+                Here you can generate an IOV address
+                <span hidden={!this.props.network}> for {this.props.network}</span>.
               </p>
             </Container>
           </Jumbotron>

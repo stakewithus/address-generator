@@ -4,17 +4,18 @@ import "./index.css";
 
 import React from "react";
 import ReactDOM from "react-dom";
-import { Redirect, Route, Switch } from "react-router";
+import { Route, Switch } from "react-router";
 import { HashRouter } from "react-router-dom";
 
 import App from "./App";
+import Start from "./Start";
 
 ReactDOM.render(
   <HashRouter>
     <Switch>
       <Route exact path="/mainnet" component={() => <App network="mainnet" />} />
       <Route exact path="/testnet" component={() => <App network="testnet" />} />
-      <Route component={() => <Redirect to="/mainnet" />} />
+      <Route component={() => <Start />} />
     </Switch>
   </HashRouter>,
   document.getElementById("root"),
