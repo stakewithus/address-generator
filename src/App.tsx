@@ -19,6 +19,7 @@ interface AppState {
   readonly generatedMnemonic: string | undefined;
   readonly step: "read" | "confirm" | "address";
   readonly words: readonly string[];
+  readonly mnemonicVerificationErrorMessage: string | undefined;
   readonly address: string | undefined;
 }
 
@@ -31,6 +32,7 @@ const emptyState: AppState = {
   generatedMnemonic: undefined,
   step: "read",
   words: [],
+  mnemonicVerificationErrorMessage: undefined,
   address: undefined,
 };
 
@@ -39,6 +41,7 @@ const confirmedState: AppState = {
   generatedMnemonic: "adjust fan defense project father wisdom early slender vicious song picnic detail",
   step: "address",
   words: [],
+  mnemonicVerificationErrorMessage: undefined,
   address: "tiov12q9ngy4wl8tnl0px65e8f4zpcgspgcn05ncywj",
 };
 
@@ -125,6 +128,24 @@ class App extends React.Component<AppProps, AppState> {
               <p>
                 <small>{this.state.words.length} words entered.</small>
               </p>
+
+              <Alert
+                variant="danger"
+                dismissible={true}
+                role="alert"
+                hidden={!this.state.mnemonicVerificationErrorMessage}
+              >
+                {this.state.mnemonicVerificationErrorMessage}
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="alert"
+                  aria-label="Close"
+                  onClick={() => this.setState({ mnemonicVerificationErrorMessage: undefined })}
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </Alert>
             </div>
             <div className="d-flex justify-content-end">
               <Button disabled={!wordCountOk(this.state.words.length)} onClick={() => this.goToAddress()}>
@@ -169,7 +190,9 @@ class App extends React.Component<AppProps, AppState> {
         address: await makeAddress(confirmed, this.props.network),
       });
     } catch (error) {
-      console.error(error);
+      this.setState({
+        mnemonicVerificationErrorMessage: error.toString(),
+      });
     }
   }
 
