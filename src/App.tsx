@@ -50,7 +50,7 @@ class App extends React.Component<AppProps, AppState> {
 
   public render(): JSX.Element {
     return (
-      <Container>
+      <Container className="mb-5">
         <Header />
         <Jumbo network={this.props.network} />
         <Row>
@@ -85,9 +85,7 @@ class App extends React.Component<AppProps, AppState> {
                 }}
               />
               <div className="d-flex justify-content-between mt-2">
-                <p>
-                  <small>{this.state.words.length} words entered.</small>
-                </p>
+                <p className="small">{this.state.words.length} words entered.</p>
               </div>
 
               <Alert
@@ -108,7 +106,7 @@ class App extends React.Component<AppProps, AppState> {
                 </button>
               </Alert>
             </div>
-            <div className="d-flex justify-content-center mb-5">
+            <p className="text-center">
               <Button
                 disabled={!wordCountOk(this.state.words.length)}
                 onClick={() => this.makeAddress()}
@@ -116,14 +114,17 @@ class App extends React.Component<AppProps, AppState> {
               >
                 Show my {this.props.network} address
               </Button>
-            </div>
+            </p>
           </Col>
         </Row>
         <Row hidden={!this.state.address}>
           <Col>
             <Alert variant="success">
-              <Alert.Heading>Your IOV address:</Alert.Heading>
-              <p className="leap">{this.state.address}</p>
+              <p className="mb-0">
+                <strong>Your IOV address:</strong>
+                <br />
+                {this.state.address}
+              </p>
             </Alert>
             <p>This browser tab contains sensitive information in memory. Please close it now.</p>
           </Col>

@@ -16,8 +16,8 @@ class Jumbo extends React.Component<JumboProps, {}> {
           <Jumbotron>
             <Container>
               <h2>
-                <span className="display-2 d-inline-block mr-2">Address Generator</span>
-                <small className="badge badge-primary align-top" hidden={!this.props.network}>
+                <span className="display-3 d-inline-block mr-2">Address Generator</span>
+                <small className="badge badge-sm badge-primary align-top" hidden={!this.props.network}>
                   {this.props.network}
                 </small>
               </h2>
