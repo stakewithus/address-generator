@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/address-generator/static/css/main.ce45cc70.chunk.css",
+    "main.js": "/address-generator/static/js/main.ef4cce5d.chunk.js",
+    "main.js.map": "/address-generator/static/js/main.ef4cce5d.chunk.js.map",
+    "runtime~main.js": "/address-generator/static/js/runtime~main.d6385ba2.js",
+    "runtime~main.js.map": "/address-generator/static/js/runtime~main.d6385ba2.js.map",
+    "static/css/2.e31a430a.chunk.css": "/address-generator/static/css/2.e31a430a.chunk.css",
+    "static/js/2.01a7de3c.chunk.js": "/address-generator/static/js/2.01a7de3c.chunk.js",
+    "static/js/2.01a7de3c.chunk.js.map": "/address-generator/static/js/2.01a7de3c.chunk.js.map",
+    "index.html": "/address-generator/index.html",
+    "precache-manifest.84a3100a4f6b75d4a28e4ce1facee812.js": "/address-generator/precache-manifest.84a3100a4f6b75d4a28e4ce1facee812.js",
+    "service-worker.js": "/address-generator/service-worker.js",
+    "static/css/2.e31a430a.chunk.css.map": "/address-generator/static/css/2.e31a430a.chunk.css.map",
+    "static/css/main.ce45cc70.chunk.css.map": "/address-generator/static/css/main.ce45cc70.chunk.css.map"
+  }
+}
