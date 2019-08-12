@@ -14,6 +14,7 @@ interface MnemonicInputState {
 }
 
 interface PrivateTypeahead<T extends TypeaheadModel> extends Typeahead<T> {
+  readonly clear: () => void;
   readonly _updateSelected: (selected: T[]) => void;
 }
 
@@ -25,6 +26,13 @@ class MnemonicInput extends React.Component<MnemonicInputProps, MnemonicInputSta
     this.state = {
       words: [],
     };
+  }
+
+  public setWords(words: readonly string[]): void {
+    if (!this.typeahead) return;
+
+    this.typeahead.clear();
+    this.typeahead._updateSelected([...words]);
   }
 
   public render(): JSX.Element {

@@ -1,4 +1,5 @@
 import { Bip39, EnglishMnemonic, Random } from "@iov/crypto";
+import copy from "clipboard-copy";
 import React from "react";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
@@ -16,8 +17,6 @@ interface AppProps {
 }
 
 interface AppState {
-  readonly generatedMnemonic: string | undefined;
-  readonly step: "read" | "confirm" | "address";
   readonly words: readonly string[];
   readonly mnemonicVerificationErrorMessage: string | undefined;
   readonly address: string | undefined;
@@ -29,8 +28,6 @@ function wordCountOk(count: number): boolean {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emptyState: AppState = {
-  generatedMnemonic: undefined,
-  step: "read",
   words: [],
   mnemonicVerificationErrorMessage: undefined,
   address: undefined,
@@ -38,8 +35,6 @@ const emptyState: AppState = {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const confirmedState: AppState = {
-  generatedMnemonic: "adjust fan defense project father wisdom early slender vicious song picnic detail",
-  step: "address",
   words: [],
   mnemonicVerificationErrorMessage: undefined,
   address: "tiov12q9ngy4wl8tnl0px65e8f4zpcgspgcn05ncywj",
@@ -53,61 +48,47 @@ class App extends React.Component<AppProps, AppState> {
     };
   }
 
-  public componentDidMount(): void {
-    if (!this.state.generatedMnemonic) {
-      this.generateNewRandomMnemonic();
-    }
-  }
-
   public render(): JSX.Element {
     return (
       <Container>
         <Header />
         <Jumbo network={this.props.network} />
-        <Row hidden={this.state.step !== "read"}>
+        <Row>
           <Col>
-            <h3>Your mnemonic:</h3>
+            <h3>Enter your mnemonic:</h3>
             <p>
-              The mnemonic represents your private key. When you lose that key, you cannot access that account
-              anymore and all assets are lost. It is in your own interest to store this in a safe and secure
-              location now. We will not show it again and it cannot be recovered.
+              We support English BIP39 mnemonics between 12 and 24 words. The mnemonic represents your private
+              key. When you lose it, you cannot access that account anymore.
             </p>
-            <Alert variant="info">
-              <p className="lead">{this.state.generatedMnemonic}</p>
-              <div className="d-flex justify-content-start">
-                <Button
-                  onClick={() => this.generateNewRandomMnemonic()}
-                  className="btn-sm"
-                  variant="outline-secondary"
-                >
-                  Generate a different one
-                </Button>
-              </div>
-            </Alert>
-
-            <div className="d-flex justify-content-end">
-              <Button
-                className="ml-2"
-                onClick={() => this.goToConfirm("discard")}
-                variant="outline-secondary"
-              >
-                Skip (use externally generated mnemonic instead)
-              </Button>
-              <Button className="ml-2" onClick={() => this.goToConfirm("use")} variant="outline-primary">
-                Use this mnemonic
-              </Button>
-            </div>
-          </Col>
-        </Row>
-        <Row hidden={this.state.step !== "confirm"}>
-          <Col>
-            <h3>Type-in your mnemonic:</h3>
-            <p>Let's make sure you can access your mnemonic when you need it.</p>
             <div>
-              <MnemonicInput id="input1" onWordsChanged={words => this.setState({ words: words })} />
-              <p>
-                <small>{this.state.words.length} words entered.</small>
-              </p>
+              <div className="d-flex justify-content-end">
+                <button onClick={() => this.generateNewRandomMnemonic()} className="btn btn-link btn-sm">
+                  Generate random
+                </button>
+                <button onClick={() => this.copyMnemonic()} className="btn btn-link btn-sm">
+                  Copy
+                </button>
+                <button onClick={() => this.clearMnemonic()} className="btn btn-link btn-sm">
+                  Clear
+                </button>
+              </div>
+              <MnemonicInput
+                ref="MnemonicInput1"
+                id="input1"
+                onWordsChanged={words => {
+                  console.log(words);
+                  this.setState({
+                    words: words,
+                    address: undefined,
+                    mnemonicVerificationErrorMessage: undefined,
+                  });
+                }}
+              />
+              <div className="d-flex justify-content-between mt-2">
+                <p>
+                  <small>{this.state.words.length} words entered.</small>
+                </p>
+              </div>
 
               <Alert
                 variant="danger"
@@ -127,14 +108,18 @@ class App extends React.Component<AppProps, AppState> {
                 </button>
               </Alert>
             </div>
-            <div className="d-flex justify-content-end">
-              <Button disabled={!wordCountOk(this.state.words.length)} onClick={() => this.goToAddress()}>
-                Generate {this.props.network} address
+            <div className="d-flex justify-content-center mb-5">
+              <Button
+                disabled={!wordCountOk(this.state.words.length)}
+                onClick={() => this.makeAddress()}
+                className="btn-lg"
+              >
+                Show my {this.props.network} address
               </Button>
             </div>
           </Col>
         </Row>
-        <Row hidden={this.state.step !== "address"}>
+        <Row hidden={!this.state.address}>
           <Col>
             <Alert variant="success">
               <Alert.Heading>Your IOV address:</Alert.Heading>
@@ -147,27 +132,16 @@ class App extends React.Component<AppProps, AppState> {
     );
   }
 
-  private goToConfirm(mnemonicAction: "discard" | "use"): void {
-    if (mnemonicAction === "discard") {
-      this.setState({
-        generatedMnemonic: undefined,
-      });
+  private async makeAddress(): Promise<void> {
+    const answer = prompt("Did you store the mneonic in a secure location? Please answer with 'yes'.");
+    if ((answer || "").trim().toLowerCase() !== "yes") {
+      return;
     }
-    this.setState({ step: "confirm" });
-  }
 
-  private async goToAddress(): Promise<void> {
     try {
       const confirmed = new EnglishMnemonic(this.state.words.join(" "));
 
-      if (this.state.generatedMnemonic) {
-        if (this.state.generatedMnemonic !== confirmed.toString()) {
-          throw new Error("The mnemonic you typed in does not match the generated mnemonic");
-        }
-      }
-
       this.setState({
-        step: "address",
         address: await makeAddress(confirmed, this.props.network),
       });
     } catch (error) {
@@ -177,9 +151,21 @@ class App extends React.Component<AppProps, AppState> {
     }
   }
 
+  private copyMnemonic(): void {
+    const mnemonic = this.state.words.join(" ");
+    copy(mnemonic);
+  }
+
+  private async clearMnemonic(): Promise<void> {
+    (this.refs.MnemonicInput1 as MnemonicInput).setWords([]);
+  }
+
   private async generateNewRandomMnemonic(): Promise<void> {
-    const mnemonic = Bip39.encode(await Random.getBytes(16)).toString();
-    this.setState({ generatedMnemonic: mnemonic });
+    const randomWords = Bip39.encode(await Random.getBytes(16))
+      .toString()
+      .split(" ");
+
+    (this.refs.MnemonicInput1 as MnemonicInput).setWords(randomWords);
   }
 }
 
