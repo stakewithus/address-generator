@@ -53,7 +53,10 @@ class MnemonicInput extends React.Component<MnemonicInputProps, MnemonicInputSta
             // Process input if some whitespace included
             if (input.search(/\s+/) !== -1) {
               const oldWords = this.state.words;
-              const newWords = input.trim().split(/\s+/);
+              const newWords = input
+                .trim()
+                .split(/\s+/)
+                .filter(Boolean);
 
               this.typeahead.setState({ text: "" });
               this.typeahead._updateSelected([...oldWords, ...newWords]);
