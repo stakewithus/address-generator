@@ -2,6 +2,12 @@
 
 Generates addresses for the IOV blockchain.
 
+## Prerequisites
+
+1. [Git](https://git-scm.com/)
+2. [Node.js](https://nodejs.org/)
+3. [Yarn](https://yarnpkg.com/)
+
 ## Use hosted
 
 The app is hosted at https://iov-one.github.io/address-generator/. Please note that various attacks
