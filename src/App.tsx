@@ -26,18 +26,10 @@ function wordCountOk(count: number): boolean {
   return count === 12 || count === 15 || count === 18 || count === 21 || count === 24;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emptyState: AppState = {
   words: [],
   mnemonicVerificationErrorMessage: undefined,
   address: undefined,
-};
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const confirmedState: AppState = {
-  words: [],
-  mnemonicVerificationErrorMessage: undefined,
-  address: "tiov12q9ngy4wl8tnl0px65e8f4zpcgspgcn05ncywj",
 };
 
 class App extends React.Component<AppProps, AppState> {
@@ -58,7 +50,8 @@ class App extends React.Component<AppProps, AppState> {
             <h3>Enter your mnemonic:</h3>
             <p>
               We support English BIP39 mnemonics between 12 and 24 words. The mnemonic represents your private
-              key. When you lose it, you cannot access that account anymore.
+              key, which only you should know. If you lose it, you will not be able to access that account any
+              more.
             </p>
             <div>
               <div className="d-flex justify-content-end">
@@ -76,7 +69,6 @@ class App extends React.Component<AppProps, AppState> {
                 ref="MnemonicInput1"
                 id="input1"
                 onWordsChanged={words => {
-                  console.log(words);
                   this.setState({
                     words: words,
                     address: undefined,
@@ -126,7 +118,11 @@ class App extends React.Component<AppProps, AppState> {
                 {this.state.address}
               </p>
             </Alert>
-            <p>This browser tab contains sensitive information in memory. Please close it now.</p>
+            <Alert variant="warning">
+              <p className="mb-0">
+                This browser tab contains sensitive information in memory. Please close it now.
+              </p>
+            </Alert>
           </Col>
         </Row>
       </Container>
@@ -134,7 +130,7 @@ class App extends React.Component<AppProps, AppState> {
   }
 
   private async makeAddress(): Promise<void> {
-    const answer = prompt("Did you store the mnemonic in a secure location? If yes, please type-in 'yes'.");
+    const answer = prompt("Did you store the mnemonic in a secure location? If yes, please type 'yes'.");
     if ((answer || "").trim().toLowerCase() !== "yes") {
       return;
     }
@@ -147,7 +143,7 @@ class App extends React.Component<AppProps, AppState> {
       });
     } catch (error) {
       this.setState({
-        mnemonicVerificationErrorMessage: error.toString(),
+        mnemonicVerificationErrorMessage: `${error.toString()}. Please check your mnemonic carefully.`,
       });
     }
   }
