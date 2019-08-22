@@ -25,11 +25,11 @@
     "not op_mini all"
   ],
   "dependencies": {
-    "@iov/bcp": "^0.16.2",
-    "@iov/bns": "^0.16.2",
-    "@iov/crypto": "^0.16.2",
-    "@iov/encoding": "^0.16.2",
-    "@iov/keycontrol": "^0.16.2",
+    "@iov/bcp": "^0.17.0",
+    "@iov/bns": "^0.17.0",
+    "@iov/crypto": "^0.17.0",
+    "@iov/encoding": "^0.17.0",
+    "@iov/keycontrol": "^0.17.0",
     "@types/node": "^10",
     "bootstrap": "^4.3.1",
     "clipboard-copy": "^3.1.0",
