@@ -14,7 +14,7 @@ class Start extends React.Component<StartProps, {}> {
     return (
       <Container>
         <Header />
-        <Jumbo />
+        <Jumbo title="Address Generator" />
         <Row>
           <Col>
             <h3>Choose your network</h3>
