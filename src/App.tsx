@@ -44,7 +44,7 @@ class App extends React.Component<AppProps, AppState> {
     return (
       <Container className="mb-5">
         <Header />
-        <Jumbo network={this.props.network} />
+        <Jumbo title="Address Generator" network={this.props.network} />
         <Row>
           <Col>
             <h3>Enter your mnemonic:</h3>

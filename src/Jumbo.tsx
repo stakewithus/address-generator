@@ -5,6 +5,7 @@ import Jumbotron from "react-bootstrap/Jumbotron";
 import Row from "react-bootstrap/Row";
 
 interface JumboProps {
+  readonly title: string;
   readonly network?: "mainnet" | "testnet";
 }
 
@@ -16,7 +17,7 @@ class Jumbo extends React.Component<JumboProps, {}> {
           <Jumbotron>
             <Container>
               <h2>
-                <span className="display-3 d-inline-block mr-2">Address Generator</span>
+                <span className="display-3 d-inline-block mr-2">{this.props.title}</span>
                 <small className="badge badge-sm badge-primary align-top" hidden={!this.props.network}>
                   {this.props.network}
                 </small>
