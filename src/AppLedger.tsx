@@ -16,19 +16,25 @@ interface AddressResponse {
   readonly network: "mainnet" | "testnet";
 }
 
-async function getAddressFromLedger(index: number): Promise<AddressResponse> {
-  const transport = await TransportWebUSB.create(1000);
+async function getAddressFromLedger(transport: TransportWebUSB, index: number): Promise<AddressResponse> {
   const app = new IovLedgerApp(transport);
   const version = await app.getVersion();
   if (!isLedgerAppVersion(version)) throw new Error(version.errorMessage);
   const response = await app.getAddress(index);
   if (!isLedgerAppAddress(response)) throw new Error(response.errorMessage);
-  transport.close();
 
   return {
     address: response.address as Address,
     network: version.testMode ? "testnet" : "mainnet",
   };
+}
+
+async function showAddressInLedger(transport: TransportWebUSB, index: number): Promise<void> {
+  const app = new IovLedgerApp(transport);
+  const version = await app.getVersion();
+  if (!isLedgerAppVersion(version)) throw new Error(version.errorMessage);
+  const response = await app.getAddress(index, true);
+  if (!isLedgerAppAddress(response)) throw new Error(response.errorMessage);
 }
 
 interface AppLedgerProps {
@@ -38,11 +44,13 @@ interface AppLedgerProps {
 interface AppLedgerState {
   readonly errorMessage: string | undefined;
   readonly address: string | undefined;
+  readonly connectionOpen: boolean;
 }
 
 const emptyState: AppLedgerState = {
   errorMessage: undefined,
   address: undefined,
+  connectionOpen: false,
 };
 
 class AppLedger extends React.Component<AppLedgerProps, AppLedgerState> {
@@ -61,9 +69,13 @@ class AppLedger extends React.Component<AppLedgerProps, AppLedgerState> {
         <Row>
           <Col>
             <h3>Use Ledger for address generation</h3>
-            <p>Connect a Leder Nano S and continue.</p>
+            <p>
+              Connect a Leder Nano S and continue. To be on the safe side, please confirm the address on the
+              Ledger screen matches the one in your browser. You can repeat this operation as often as you
+              like. Only one address will be generated.
+            </p>
             <p className="text-center">
-              <Button onClick={() => this.tryLedger()}>
+              <Button onClick={() => this.tryLedger()} disabled={this.state.connectionOpen}>
                 Get my {this.props.network} address from Ledger Nano S
               </Button>
             </p>
@@ -90,8 +102,13 @@ class AppLedger extends React.Component<AppLedgerProps, AppLedgerState> {
   private async tryLedger(): Promise<void> {
     this.setState({ ...emptyState });
 
+    const accountIndex = 0; // leads to m/44'/234'/0'
+    let transport: TransportWebUSB | undefined;
+
     try {
-      const result = await getAddressFromLedger(0);
+      this.setState({ connectionOpen: true });
+      transport = await TransportWebUSB.create(1000);
+      const result = await getAddressFromLedger(transport, accountIndex);
 
       if (result.network !== this.props.network) {
         throw new Error(
@@ -102,10 +119,17 @@ class AppLedger extends React.Component<AppLedgerProps, AppLedgerState> {
       this.setState({
         address: result.address,
       });
+
+      await showAddressInLedger(transport, accountIndex);
+
+      transport.close();
+      this.setState({ connectionOpen: false });
     } catch (error) {
       console.warn(error);
+      if (transport) transport.close();
       this.setState({
         errorMessage: error instanceof Error ? error.message : error.toString(),
+        connectionOpen: false,
       });
     }
   }
