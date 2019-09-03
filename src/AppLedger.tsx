@@ -122,11 +122,11 @@ class AppLedger extends React.Component<AppLedgerProps, AppLedgerState> {
 
       await showAddressInLedger(transport, accountIndex);
 
-      transport.close();
+      await transport.close();
       this.setState({ connectionOpen: false });
     } catch (error) {
       console.warn(error);
-      if (transport) transport.close();
+      if (transport) await transport.close();
       this.setState({
         errorMessage: error instanceof Error ? error.message : error.toString(),
         connectionOpen: false,
