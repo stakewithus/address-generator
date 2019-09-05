@@ -1,5 +1,5 @@
 import { Address } from "@iov/bcp";
-import { IovLedgerApp, isLedgerAppAddress, isLedgerAppVersion } from "@iov/ledger-bns";
+import { IovLedgerApp, isIovLedgerAppAddress, isIovLedgerAppVersion } from "@iov/ledger-bns";
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import React from "react";
 import Alert from "react-bootstrap/Alert";
@@ -19,9 +19,9 @@ interface AddressResponse {
 async function getAddressFromLedger(transport: TransportWebUSB, index: number): Promise<AddressResponse> {
   const app = new IovLedgerApp(transport);
   const version = await app.getVersion();
-  if (!isLedgerAppVersion(version)) throw new Error(version.errorMessage);
+  if (!isIovLedgerAppVersion(version)) throw new Error(version.errorMessage);
   const response = await app.getAddress(index);
-  if (!isLedgerAppAddress(response)) throw new Error(response.errorMessage);
+  if (!isIovLedgerAppAddress(response)) throw new Error(response.errorMessage);
 
   return {
     address: response.address as Address,
@@ -32,9 +32,9 @@ async function getAddressFromLedger(transport: TransportWebUSB, index: number): 
 async function showAddressInLedger(transport: TransportWebUSB, index: number): Promise<void> {
   const app = new IovLedgerApp(transport);
   const version = await app.getVersion();
-  if (!isLedgerAppVersion(version)) throw new Error(version.errorMessage);
+  if (!isIovLedgerAppVersion(version)) throw new Error(version.errorMessage);
   const response = await app.getAddress(index, true);
-  if (!isLedgerAppAddress(response)) throw new Error(response.errorMessage);
+  if (!isIovLedgerAppAddress(response)) throw new Error(response.errorMessage);
 }
 
 interface AppLedgerProps {
@@ -122,11 +122,11 @@ class AppLedger extends React.Component<AppLedgerProps, AppLedgerState> {
 
       await showAddressInLedger(transport, accountIndex);
 
-      transport.close();
+      await transport.close();
       this.setState({ connectionOpen: false });
     } catch (error) {
       console.warn(error);
-      if (transport) transport.close();
+      if (transport) await transport.close();
       this.setState({
         errorMessage: error instanceof Error ? error.message : error.toString(),
         connectionOpen: false,
